@@ -1,12 +1,14 @@
 {
-  "name": "gcp-cicd-demo",
+  "name": "gcp-vpc-peering-demo-app",
   "version": "1.0.0",
-  "description": "Demo Node.js app for GCP Cloud Build CI/CD",
-  "main": "index.js",
+  "description": "Sample app for GCP VPC peering and Cloud Storage access",
+  "main": "app.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"No tests yet\" && exit 0"
+    "start": "node app.js"
   },
-  "author": "",
-  "license": "ISC"
+  "dependencies": {
+    "express": "^4.18.2",
+    "@google-cloud/storage": "^7.19.0",
+    "multer": "^1.4.4"
+  }
 }
