@@ -1,0 +1,22 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '$LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:$SHORT_SHA', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '$LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:$SHORT_SHA']
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      [
+        'run', 'deploy', '$SERVICE_NAME',
+        '--image', '$LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:$SHORT_SHA',
+        '--region', '$LOCATION',
+        '--platform', 'managed',
+        '--allow-unauthenticated'
+      ]
+images:
+  - '$LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:$SHORT_SHA'
+substitutions:
+  _SERVICE_NAME: "demo-service"
+  _IMAGE_NAME: "demo-image"
+  _REPO_NAME: "demo-repo"
+  _LOCATION: "us-central1"
