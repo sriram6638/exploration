@@ -1,3 +1,42 @@
+## Complete CI/CD Stages in GCP Cloud Build
+
+Here’s what happens in a typical production-ready CI/CD pipeline after a successful build:
+
+### 1. Source Code Commit
+- Developer pushes code to the repository (GitHub, GitLab, or Cloud Source Repositories).
+
+### 2. Trigger Activation
+- Cloud Build trigger detects the commit (based on branch or tag rules).
+
+### 3. Build Stage
+- Cloud Build runs the steps in `cloudbuild.yaml`:
+	- Installs dependencies
+	- Runs tests (if configured)
+	- Builds the Docker image
+
+### 4. Artifact Storage
+- The built Docker image is pushed to Artifact Registry (secure container image storage).
+
+### 5. Deployment Stage
+- Cloud Build deploys the new image to Cloud Run (or App Engine, GKE, etc.).
+- The service is updated with the new version.
+
+### 6. Verification & Monitoring
+- Cloud Run provides a new revision and URL for the deployed service.
+- You can test the live service.
+- Cloud Monitoring and Logging track health, errors, and performance.
+
+### 7. Rollback (if needed)
+- If issues are found, you can roll back to a previous revision in Cloud Run.
+
+### 8. Notification (optional)
+- Cloud Build can be configured to send notifications (Slack, email, etc.) on build/deploy status.
+
+---
+**Summary:**
+1. Code pushed → 2. Trigger fires → 3. Build & test → 4. Image stored → 5. Deploy → 6. Monitor → 7. Rollback if needed → 8. Notify team
+
+This is a full CI/CD loop for modern cloud-native applications on GCP.
 
 # Sample Node.js App for GCP Cloud Build Demo
 
