@@ -8,10 +8,19 @@ const upload = multer({ dest: 'uploads/' });
 
 // Set your bucket name here
 const BUCKET_NAME = process.env.BUCKET_NAME || 'your-bucket-name';
-// Path to service account key file
-const KEYFILE = process.env.GOOGLE_APPLICATION_CREDENTIALS || '/app/key.json';
-
-const storage = new Storage({ keyFilename: KEYFILE });
+// For Cloud Run, use default credentials. For local/dev, allow credentials object via env var.
+let storage;
+if (process.env.GCLOUD_CREDENTIALS_JSON) {
+  // Parse credentials from env var (not recommended for prod)
+  const credentials = JSON.parse(process.env.GCLOUD_CREDENTIALS_JSON);
+  storage = new Storage({ credentials });
+} else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+  // Use key file path if provided
+  storage = new Storage({ keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS });
+} else {
+  // Use default credentials (Cloud Run, GCE, etc.)
+  storage = new Storage();
+}
 
 app.get('/', (req, res) => {
   res.send('<form action="/upload" method="post" enctype="multipart/form-data"><input type="file" name="file" /><button type="submit">Upload</button></form>');
